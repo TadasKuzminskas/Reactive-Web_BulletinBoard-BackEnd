@@ -1,0 +1,25 @@
+
+
+CREATE TABLE `boarddb`.`user` (
+id BIGINT PRIMARY KEY AUTO_INCREMENT,
+username varchar(255),
+name varchar(255),
+lastname varchar(255),
+password varchar(255)
+);
+
+CREATE TABLE `boarddb`.`post` (
+id BIGINT PRIMARY KEY AUTO_INCREMENT,
+name varchar(255),
+content varchar(255),
+ispublic boolean,
+user BIGINT
+);
+
+
+CREATE TABLE `boarddb`.`comment` (
+id varchar(255) PRIMARY KEY,
+content varchar(255),
+user BIGINT,
+post BIGINT
+);
