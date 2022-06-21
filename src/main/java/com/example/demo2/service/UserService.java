@@ -1,6 +1,7 @@
 package com.example.demo2.service;
 
 
+import com.example.demo2.config.security.jwt.JWTUtil;
 import com.example.demo2.model.Post;
 import com.example.demo2.model.User;
 import com.example.demo2.repository.Custom.PostRepositoryCustom;
@@ -9,6 +10,8 @@ import com.example.demo2.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -31,6 +34,9 @@ public class UserService {
 
     @Autowired
     PostService postService;
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     public Mono<User> findUserById(Long id) {
         return userRepository.findUserById(id);
@@ -59,6 +65,13 @@ public class UserService {
                 postService.getAllByUserWithComments(id).collectList(),
                 (t1, t2) -> t1.withPosts(t2));
     }
+
+//    public Mono<User> mainPage(String token) {
+//        String[] str = token.split(" ");
+//        String username  = jwtUtil.getUsernameFromToken(str[1]);
+//
+//
+//    }
 
 
 

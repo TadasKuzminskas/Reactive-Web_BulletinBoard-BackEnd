@@ -52,9 +52,18 @@ public class UserController {
         return userService.findAllByIdWithPosts(id);
     }
 
-    @GetMapping("/userLoadUp/{id}")
+    @GetMapping("/mainPage/{id}")
     public Mono<User> getUserLoadUp(@PathVariable Long id) {
+        //String username  = jwtUtil.getUsernameFromToken()
         return userService.findAllByIdWithPostsAndComments(id);
+    }
+
+    @GetMapping("/main")
+    public void main(@RequestHeader (name="Authorization") String token) {
+        String[] str = token.split(" ");
+        String username  = jwtUtil.getUsernameFromToken(str[1]);
+        //System.out.println(username);
+        System.out.println(username);
     }
 
     @PostMapping("/user")

@@ -52,6 +52,14 @@ public class UserRepositoryCustom {
                 .one();
     }
 
+//    public Mono<Long> findUserIdByUsername(String username) {
+//        return this.databaseClient
+//                .sql("SELECT id FROM user WHERE username=:username")
+//                .bind("username", username)
+//
+//
+//    }
+
     public Mono<User> findByUsername(String username) {
          Mono<User> user = this.databaseClient
                 .sql("SELECT * FROM user WHERE username=:username")
