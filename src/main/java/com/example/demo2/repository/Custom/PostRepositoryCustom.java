@@ -63,7 +63,7 @@ public class PostRepositoryCustom {
                 .all();
     }
 
-    public Mono<Post> findById(UUID id) {
+    public Mono<Post> findById(Long id) {
         return this.databaseClient
                 .sql("SELECT * FROM post WHERE id=:id")
                 .bind("id", id)

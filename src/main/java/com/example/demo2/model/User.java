@@ -3,10 +3,12 @@ package com.example.demo2.model;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 
+import org.springframework.data.annotation.Transient;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
+import reactor.core.publisher.Flux;
 
 import javax.management.relation.Role;
 import java.util.Arrays;
@@ -33,7 +35,8 @@ public class User implements UserDetails {
     @Getter @Setter
     private List<Role> roles;
 
-    private List<Post> posts;
+    @Transient
+    @With private List<Post> posts;
 
     @Builder
     public User(String username, String password){

@@ -33,6 +33,11 @@ public class PostController {
         return  postService.getAllPosts();
     }
 
+    @GetMapping("/postWithComments/{id}")
+    public Mono<Post> getPostWithComments(@PathVariable Long id) {
+        return postService.getByIdWithComments(id);
+    }
+
     @GetMapping("/postsByUser/{id}")
     public Flux<Post> getAllByUser(@PathVariable Long id) {return postService.getAllByUser(id);}
 

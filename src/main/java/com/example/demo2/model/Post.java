@@ -1,10 +1,10 @@
 package com.example.demo2.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -22,5 +22,9 @@ public class Post {
     private Boolean isPublic;
 
     private Long user;
+
+    @Transient
+    @With
+    private List<Comment> comments;
 
 }

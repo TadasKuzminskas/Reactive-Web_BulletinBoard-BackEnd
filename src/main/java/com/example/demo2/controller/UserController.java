@@ -47,6 +47,16 @@ public class UserController {
         return userService.findUserById(id);
     }
 
+    @GetMapping("/userWithPosts/{id}")
+    public Mono<User> getUserWithPosts(@PathVariable Long id) {
+        return userService.findAllByIdWithPosts(id);
+    }
+
+    @GetMapping("/userLoadUp/{id}")
+    public Mono<User> getUserLoadUp(@PathVariable Long id) {
+        return userService.findAllByIdWithPostsAndComments(id);
+    }
+
     @PostMapping("/user")
     public Mono<Long> addUser(@RequestBody User user) {
         log.info("USER_CONTROLLER: addUser()");

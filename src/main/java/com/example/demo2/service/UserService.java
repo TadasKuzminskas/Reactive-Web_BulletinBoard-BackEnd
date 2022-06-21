@@ -26,6 +26,12 @@ public class UserService {
     @Autowired
     UserRepositoryCustom userRepositoryCustom;
 
+    @Autowired
+    PostRepositoryCustom postRepositoryCustom;
+
+    @Autowired
+    PostService postService;
+
     public Mono<User> findUserById(Long id) {
         return userRepository.findUserById(id);
     }
@@ -41,6 +47,19 @@ public class UserService {
     public Mono<Integer> updateUser(User user, Long id) {return userRepositoryCustom.updateUser(user, id);}
 
     public Mono<Integer> deleteUser(Long id) {return userRepositoryCustom.deleteUserById(id);}
+
+    public Mono<User> findAllByIdWithPosts(Long id) {
+        return Mono.zip(userRepositoryCustom.findUserById(id),
+                postRepositoryCustom.findAllByUser(id).collectList(),
+                (t1, t2) -> t1.withPosts(t2));
+    }
+
+    public Mono<User>findAllByIdWithPostsAndComments(Long id) {
+        return Mono.zip(userRepositoryCustom.findUserById(id),
+                postService.getAllByUserWithComments(id).collectList(),
+                (t1, t2) -> t1.withPosts(t2));
+    }
+
 
 
 }
