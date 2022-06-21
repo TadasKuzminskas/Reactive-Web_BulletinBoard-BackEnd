@@ -18,7 +18,7 @@ user BIGINT
 
 
 CREATE TABLE `boarddb`.`comment` (
-id varchar(255) PRIMARY KEY,
+id BIGINT PRIMARY KEY AUTO_INCREMENT,
 content varchar(255),
 user BIGINT,
 post BIGINT
