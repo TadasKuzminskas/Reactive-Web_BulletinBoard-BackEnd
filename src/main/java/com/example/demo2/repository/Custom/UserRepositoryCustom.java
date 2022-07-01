@@ -43,6 +43,15 @@ public class UserRepositoryCustom {
                 .all();
     }
 
+    public Flux<User> findAllUsersThatStartWith(String text) {
+        return this.databaseClient
+                .sql("SELECT user.id, user.username, user.name, user.lastname, user.password, user.roles FROM user WHERE user.username LIKE :text   ")
+                .bind("text", text+"%")
+                .filter((statement, executeFunction) -> statement.fetchSize(10).execute())
+                .map(MAPPING_FUNCTION)
+                .all().log();
+    }
+
 
     public Mono<User> findUserById(Long id) {
         return this.databaseClient

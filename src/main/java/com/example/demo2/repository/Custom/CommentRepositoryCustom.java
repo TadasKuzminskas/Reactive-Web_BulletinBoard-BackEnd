@@ -24,8 +24,9 @@ public class CommentRepositoryCustom {
             .id(row.get("id", Long.class))
             .content(row.get("content", String.class))
             .post(row.get("post", Long.class))
-            .user(row.get("user", Long.class))
+            .username(row.get("username", String.class))
             .build();
+
 
     private final DatabaseClient databaseClient;
 
@@ -39,11 +40,11 @@ public class CommentRepositoryCustom {
 
     public Mono<Long> saveComment(Comment comment) {
         return this.databaseClient
-                .sql("INSERT INTO  comment (content, post, user) VALUES (:content, :post, :user)")
+                .sql("INSERT INTO  comment (content, post, username) VALUES (:content, :post, :username)")
                 .filter((statement, executeFunction) -> statement.returnGeneratedValues("id").execute())
                 .bind("content", comment.getContent())
                 .bind("post", comment.getPost())
-                .bind("user", comment.getUser())
+                .bind("username", comment.getUsername())
                 .fetch()
                 .first()
                 .map(r -> (Long) r.get("id"));

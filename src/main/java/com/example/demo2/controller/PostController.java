@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/v1")
+@CrossOrigin
 @Slf4j
 public class PostController {
 
@@ -22,7 +23,6 @@ public class PostController {
         return postService.addPost(post);
     }
 
-    @CrossOrigin("http://localhost:3000")
     @GetMapping("/isPublic")
     public Flux<Post> getAllPublicPosts() {
         return postService.getAllPublicPosts();
@@ -38,8 +38,8 @@ public class PostController {
         return postService.getByIdWithComments(id);
     }
 
-    @GetMapping("/postsByUser/{id}")
-    public Flux<Post> getAllByUser(@PathVariable Long id) {return postService.getAllByUser(id);}
+//    @GetMapping("/postsByUser/{username}")
+//    public Flux<Post> getAllByUser(@PathVariable String username) {return postService.getAllPostsByUserWithComments(username);}
 
     @DeleteMapping("/post/{id}")
     public Mono<Integer> deletePostById(@PathVariable Long id) {return  postService.deletePostById(id);}

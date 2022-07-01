@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/v1")
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin
 @Slf4j
 public class UserController {
 
@@ -40,30 +40,34 @@ public class UserController {
                 .body(userFlux, User.class);
     }
 
-
     @GetMapping("/user/{id}")
     public Mono<User> getUserById(@PathVariable Long id) {
         log.info("USER_CONTROLLER: getUserById({})", id);
         return userService.findUserById(id);
     }
 
-    @GetMapping("/userWithPosts/{id}")
-    public Mono<User> getUserWithPosts(@PathVariable Long id) {
-        return userService.findAllByIdWithPosts(id);
+    @GetMapping("/user/starts/{text}")
+    public Flux<User> getUsersThatStartWith(@PathVariable String text) {
+        if(text == null) {
+            return null;
+        }
+        return userRepositoryCustom.findAllUsersThatStartWith(text);
     }
 
-    @GetMapping("/mainPage/{id}")
-    public Mono<User> getUserLoadUp(@PathVariable Long id) {
-        //String username  = jwtUtil.getUsernameFromToken()
-        return userService.findAllByIdWithPostsAndComments(id);
+    @GetMapping("/userWithPosts/{id}")
+    public Mono<User> getUserWithPosts(@PathVariable String username) {
+        return userService.findAllByIdWithPosts(username);
     }
+
+//    @GetMapping("/mainPage/{username}")
+//    public Mono<User> getUserLoadUp(@PathVariable String username) {
+//        //String username  = jwtUtil.getUsernameFromToken()
+//        return userService.findAllByIdWithPostsAndComments(username);
+//    }
 
     @GetMapping("/main")
-    public void main(@RequestHeader (name="Authorization") String token) {
-        String[] str = token.split(" ");
-        String username  = jwtUtil.getUsernameFromToken(str[1]);
-        //System.out.println(username);
-        System.out.println(username);
+    public Mono<User> main(@RequestHeader (name="Authorization") String token) {
+       return userService.mainPage(token);
     }
 
     @PostMapping("/user")

@@ -13,13 +13,18 @@ id BIGINT PRIMARY KEY AUTO_INCREMENT,
 name varchar(255),
 content varchar(255),
 ispublic boolean,
-user BIGINT
+username varchar(255)
 );
-
 
 CREATE TABLE `boarddb`.`comment` (
 id BIGINT PRIMARY KEY AUTO_INCREMENT,
 content varchar(255),
-user BIGINT,
+username varchar(255),
 post BIGINT
+);
+
+CREATE TABLE `boarddb`.`friends` (
+id BIGINT PRIMARY KEY AUTO_INCREMENT,
+username varchar(255),
+friend varchar(255)
 );

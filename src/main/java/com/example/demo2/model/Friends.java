@@ -6,21 +6,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-import java.util.UUID;
-
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+public class Friends {
 
     @Id
     private Long id;
 
-    private String content;
-
     private String username;
 
-    private Long post;
+    private String friend;
 
 }

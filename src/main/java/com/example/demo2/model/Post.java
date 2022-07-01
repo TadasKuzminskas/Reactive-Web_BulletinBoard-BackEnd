@@ -21,7 +21,9 @@ public class Post {
 
     private Boolean isPublic;
 
-    private Long user;
+    private String username;
+
+    private String image;
 
     @Transient
     @With
