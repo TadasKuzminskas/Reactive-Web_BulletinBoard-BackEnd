@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-import java.util.UUID;
+import java.time.Instant;
 
 @Builder
 @Data
@@ -22,5 +22,7 @@ public class Comment {
     private String username;
 
     private Long post;
+
+    private Instant date;
 
 }

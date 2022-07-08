@@ -15,6 +15,9 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
 @RestController
 @RequestMapping("/v1")
 @CrossOrigin
@@ -59,18 +62,12 @@ public class UserController {
         return userService.findAllByIdWithPosts(username);
     }
 
-//    @GetMapping("/mainPage/{username}")
-//    public Mono<User> getUserLoadUp(@PathVariable String username) {
-//        //String username  = jwtUtil.getUsernameFromToken()
-//        return userService.findAllByIdWithPostsAndComments(username);
-//    }
-
     @GetMapping("/main")
     public Mono<User> main(@RequestHeader (name="Authorization") String token) {
        return userService.mainPage(token);
     }
 
-    @PostMapping("/user")
+    @PostMapping("/userRegistration")
     public Mono<Long> addUser(@RequestBody User user) {
         log.info("USER_CONTROLLER: addUser()");
         return userService.addUser(user);
@@ -89,16 +86,36 @@ public class UserController {
     }
 
     public Mono<ServerResponse> getToken(ServerRequest serverRequest) {
-        Mono<User> userMono = serverRequest.bodyToMono(User.class);
+        Mono<User> userMono = serverRequest.bodyToMono(User.class).log();
 
         return userMono.flatMap(user -> userRepositoryCustom.findByUsername(user.getUsername())
                 .flatMap(userDetails -> {
-                    if(user.getPassword().equals(userDetails.getPassword())) {
+                    if(passwordHash(user.getPassword()).equals(userDetails.getPassword())) {
                         return ServerResponse.ok().bodyValue(new AuthResponse(jwtUtil.generateToken(user)));
                     } else {
                         return  ServerResponse.badRequest().build();
                     }
                 }).switchIfEmpty(ServerResponse.badRequest().build()));
+    }
+
+    public String passwordHash(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            md.update(password.getBytes(StandardCharsets.UTF_8));
+
+            byte[] bytes = md.digest();
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < bytes.length; i++) {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            return sb.toString();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
     }
 
 }

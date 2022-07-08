@@ -57,12 +57,6 @@ public class UserService {
         return userRepositoryCustom.findAllUsersThatStartWith(text);
     }
 
-//    public Mono<User>findAllByIdWithPostsAndComments(String username) {
-//        return Mono.zip(userRepositoryCustom.findByUsername(username),
-//                postService.getAllPostsByUserWithComments(username).collectList(),
-//                (t1, t2) -> t1.withPosts(t2));
-//    }
-
     public Mono<User> mainPage(String token) {
         String[] str = token.split(" ");
         String username  = jwtUtil.getUsernameFromToken(str[1]);

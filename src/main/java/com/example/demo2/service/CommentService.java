@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
+
 @Service
 @Slf4j
 public class CommentService {
@@ -25,7 +27,9 @@ public class CommentService {
         return commentRepository.findAll();
     }
 
-    public Mono<Long> saveComment(Comment comment) {return commentRepositoryCustom.saveComment(comment);}
+    public Mono<Long> saveComment(Comment comment) {
+        comment.setDate(Instant.now());
+        return commentRepositoryCustom.saveComment(comment);}
 
     public Flux<Comment> getAllCommentsByPost(Long id) {return commentRepositoryCustom.getCommentsByPost(id);}
 

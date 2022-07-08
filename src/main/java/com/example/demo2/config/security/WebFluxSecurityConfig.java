@@ -70,7 +70,8 @@ public class WebFluxSecurityConfig {
                 authorizeExchange(
                         authorizeExchangeSpec -> authorizeExchangeSpec
                                 .pathMatchers("/v1/token").permitAll()
-                                .pathMatchers("/v1/user").permitAll()
+                                .pathMatchers("/v1/userRegistration").permitAll()
+                                .pathMatchers("/v1/friend").permitAll()
                                 .anyExchange().authenticated()
                 )
                 .exceptionHandling()

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
@@ -25,6 +26,7 @@ public class CommentRepositoryCustom {
             .content(row.get("content", String.class))
             .post(row.get("post", Long.class))
             .username(row.get("username", String.class))
+            .date(row.get("date", Instant.class))
             .build();
 
 
@@ -40,11 +42,12 @@ public class CommentRepositoryCustom {
 
     public Mono<Long> saveComment(Comment comment) {
         return this.databaseClient
-                .sql("INSERT INTO  comment (content, post, username) VALUES (:content, :post, :username)")
+                .sql("INSERT INTO  comment (content, post, username, date) VALUES (:content, :post, :username, :date)")
                 .filter((statement, executeFunction) -> statement.returnGeneratedValues("id").execute())
                 .bind("content", comment.getContent())
                 .bind("post", comment.getPost())
                 .bind("username", comment.getUsername())
+                .bind("date", comment.getDate())
                 .fetch()
                 .first()
                 .map(r -> (Long) r.get("id"));

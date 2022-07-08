@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -24,6 +25,8 @@ public class Post {
     private String username;
 
     private String image;
+
+    private Instant date;
 
     @Transient
     @With
