@@ -9,6 +9,7 @@ import com.example.demo2.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -49,6 +50,11 @@ public class UserController {
         return userService.findUserById(id);
     }
 
+    @GetMapping("/activeUser")
+    public Mono<User> getActiveUser(@RequestHeader (name="Authorization") String token) {
+        return userService.getUserByJwt(token);
+    }
+
     @GetMapping("/user/starts/{text}")
     public Flux<User> getUsersThatStartWith(@PathVariable String text) {
         if(text == null) {
@@ -69,7 +75,6 @@ public class UserController {
 
     @PostMapping("/userRegistration")
     public Mono<Long> addUser(@RequestBody User user) {
-        log.info("USER_CONTROLLER: addUser()");
         return userService.addUser(user);
     }
 
@@ -86,16 +91,30 @@ public class UserController {
     }
 
     public Mono<ServerResponse> getToken(ServerRequest serverRequest) {
-        Mono<User> userMono = serverRequest.bodyToMono(User.class).log();
+        Mono<User> userMono = serverRequest.bodyToMono(User.class);
 
         return userMono.flatMap(user -> userRepositoryCustom.findByUsername(user.getUsername())
                 .flatMap(userDetails -> {
                     if(passwordHash(user.getPassword()).equals(userDetails.getPassword())) {
-                        return ServerResponse.ok().bodyValue(new AuthResponse(jwtUtil.generateToken(user)));
+                        return ServerResponse.ok().bodyValue(new AuthResponse(jwtUtil.generateToken(user), jwtUtil.generateRefreshToken(user)));
                     } else {
                         return  ServerResponse.badRequest().build();
                     }
                 }).switchIfEmpty(ServerResponse.badRequest().build()));
+    }
+
+    public Mono<ServerResponse> getRefreshToken(ServerRequest serverRequest) {
+        Mono<AuthResponse> authMono = serverRequest.bodyToMono(AuthResponse.class);
+        return authMono.flatMap(tokens -> {
+                if (jwtUtil.isRefreshTokenValidated(tokens.getRefresh())) {
+                    String username  = jwtUtil.getUsernameFromRefreshToken(tokens.getRefresh());
+                    return userRepositoryCustom.findByUsername(username).flatMap(user -> {
+                        String newToken = jwtUtil.generateToken(user);
+                        return ServerResponse.ok().bodyValue(new AuthResponse(newToken, tokens.getRefresh()));
+                    }).switchIfEmpty(ServerResponse.badRequest().build());
+                }
+                    return ServerResponse.badRequest().build();
+        }).switchIfEmpty(ServerResponse.badRequest().build());
     }
 
     public String passwordHash(String password) {

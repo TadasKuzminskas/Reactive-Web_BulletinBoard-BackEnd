@@ -8,7 +8,9 @@ import com.example.demo2.repository.Custom.UserRepositoryCustom;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -36,7 +38,10 @@ public class UserService {
     }
 
     public Mono<Long> addUser(User user) {
-        return userRepository.addUser(user);
+            //Checks if the user is present. If so returns a bad request. If not then populates the db and returns 200
+        return userRepositoryCustom.findByUsername(user.getUsername())
+                .map(user1 -> 0L)
+                .switchIfEmpty(userRepositoryCustom.addUser(user));
     }
 
     public Flux<User> findAllUsers() {
@@ -53,6 +58,8 @@ public class UserService {
                 (t1, t2) -> t1.withPosts(t2));
     }
 
+
+
     public Flux<User> findAllUsersThatStartWith(String text) {
         return userRepositoryCustom.findAllUsersThatStartWith(text);
     }
@@ -66,5 +73,10 @@ public class UserService {
     }
 
 
+    public Mono<User> getUserByJwt(String token) {
+        String[] str = token.split(" ");
+        String username  = jwtUtil.getUsernameFromToken(str[1]);
 
+        return userRepositoryCustom.findByUsername(username);
+    }
 }

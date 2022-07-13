@@ -16,8 +16,8 @@ public class Router {
     public RouterFunction<ServerResponse> userRouter(UserController userController) {
         return RouterFunctions.route()
                 .GET("/v1/users", userController::findAllUsers)
-                //.GET("/v1/user/{id}", userController::getUserById())
                 .POST("/v1/token", userController::getToken)
+                .POST("v1/refreshToken", userController::getRefreshToken)
                 .build();
     }
 

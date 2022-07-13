@@ -50,26 +50,13 @@ public class WebFluxSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    CorsWebFilter corsFilter() {
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.addAllowedOrigin("*");
-//        config.addAllowedHeader("*");
-//        config.addAllowedMethod("*");
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", config);
-//
-//        return new CorsWebFilter(source);
-//    }
-
-
     @Bean
     public SecurityWebFilterChain filterChain(ServerHttpSecurity http) {
         return http.
                 authorizeExchange(
                         authorizeExchangeSpec -> authorizeExchangeSpec
                                 .pathMatchers("/v1/token").permitAll()
+                                .pathMatchers("/v1/refreshToken").permitAll()
                                 .pathMatchers("/v1/userRegistration").permitAll()
                                 .pathMatchers("/v1/friend").permitAll()
                                 .anyExchange().authenticated()
