@@ -8,7 +8,6 @@ import com.example.demo2.model.Post;
 import com.example.demo2.repository.Custom.CommentRepositoryCustom;
 import com.example.demo2.repository.Custom.FriendRepositoryCustom;
 import com.example.demo2.repository.Custom.PostRepositoryCustom;
-import javafx.geometry.Pos;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

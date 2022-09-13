@@ -4,7 +4,7 @@ import com.example.demo2.model.Comment;
 import com.example.demo2.model.Post;
 import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
-import javafx.geometry.Pos;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.r2dbc.core.DatabaseClient;
