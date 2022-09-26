@@ -1,4 +1,4 @@
-# BackEnd for Reactive-Web_BulletinBoard-FrontEnd
+# BackEnd for Reactive-Web_BulletinBoard-BackEnd
 IN DEVELOPMENT: Reactive Web MVC with Spring Security and JWT token.
 
 Utilizes:
