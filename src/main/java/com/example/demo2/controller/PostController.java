@@ -33,11 +33,6 @@ public class PostController {
         return  postService.getAllPosts();
     }
 
-    @GetMapping("/postWithComments/{id}")
-    public Mono<Post> getPostWithComments(@PathVariable Long id) {
-        return postService.getByIdWithComments(id);
-    }
-
     @GetMapping("/isPrivate/{offset}")
     public Flux<Post> getAllPrivatePostsByUsers(@RequestHeader (name="Authorization") String token, @PathVariable int offset) {
         return postService.getPrivateByUsers(token, offset);
@@ -48,6 +43,11 @@ public class PostController {
 
     @PutMapping("/post")
     public Mono<Integer> updatePostById(@RequestBody Post post) {return postService.updatePost(post);}
+
+//    @GetMapping("/postWithComments/{id}")
+//    public Mono<Post> getPostWithComments(@PathVariable Long id) {
+//        return postService.getByIdWithComments(id);
+//    }
 
 
 

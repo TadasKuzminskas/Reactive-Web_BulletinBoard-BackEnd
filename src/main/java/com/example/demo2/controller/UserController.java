@@ -60,18 +60,20 @@ public class UserController {
         if(text == null) {
             return null;
         }
-        return userRepositoryCustom.findAllUsersThatStartWith(text);
+        return userService.findAllUsersThatStartWith(text);
     }
 
-    @GetMapping("/userWithPosts/{id}")
-    public Mono<User> getUserWithPosts(@PathVariable String username) {
-        return userService.findAllByIdWithPosts(username);
-    }
+    //Do I use this?
 
-    @GetMapping("/main")
-    public Mono<User> main(@RequestHeader (name="Authorization") String token) {
-       return userService.mainPage(token);
-    }
+//    @GetMapping("/userWithPosts/{id}")
+//    public Mono<User> getUserWithPosts(@PathVariable String username) {
+//        return userService.findAllByIdWithPosts(username);
+//    }
+
+//    @GetMapping("/main")
+//    public Mono<User> main(@RequestHeader (name="Authorization") String token) {
+//       return userService.mainPage(token);
+//    }
 
     @PostMapping("/userRegistration")
     public Mono<Long> addUser(@RequestBody User user) {

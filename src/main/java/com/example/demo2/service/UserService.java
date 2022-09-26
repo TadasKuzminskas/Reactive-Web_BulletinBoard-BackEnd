@@ -19,9 +19,6 @@ import reactor.core.publisher.Mono;
 public class UserService {
 
     @Autowired
-    UserRepositoryCustom userRepository;
-
-    @Autowired
     UserRepositoryCustom userRepositoryCustom;
 
     @Autowired
@@ -34,7 +31,7 @@ public class UserService {
     private JWTUtil jwtUtil;
 
     public Mono<User> findUserById(Long id) {
-        return userRepository.findUserById(id);
+        return userRepositoryCustom.findUserById(id);
     }
 
     public Mono<Long> addUser(User user) {
@@ -42,6 +39,7 @@ public class UserService {
         return userRepositoryCustom.findByUsername(user.getUsername())
                 .map(user1 -> 0L)
                 .switchIfEmpty(userRepositoryCustom.addUser(user));
+
     }
 
     public Flux<User> findAllUsers() {
@@ -52,26 +50,9 @@ public class UserService {
 
     public Mono<Integer> deleteUser(Long id) {return userRepositoryCustom.deleteUserById(id);}
 
-    public Mono<User> findAllByIdWithPosts(String username) {
-        return Mono.zip(userRepositoryCustom.findByUsername(username),
-                postRepositoryCustom.findAllByUser(username).collectList(),
-                (t1, t2) -> t1.withPosts(t2));
-    }
-
-
-
     public Flux<User> findAllUsersThatStartWith(String text) {
         return userRepositoryCustom.findAllUsersThatStartWith(text);
     }
-
-    public Mono<User> mainPage(String token) {
-        String[] str = token.split(" ");
-        String username  = jwtUtil.getUsernameFromToken(str[1]);
-        return Mono.zip(userRepositoryCustom.findByUsername(username),
-                postRepositoryCustom.findAllByUser(username).collectList(),
-                (t1, t2) -> t1.withPosts(t2));
-    }
-
 
     public Mono<User> getUserByJwt(String token) {
         String[] str = token.split(" ");
@@ -79,4 +60,21 @@ public class UserService {
 
         return userRepositoryCustom.findByUsername(username);
     }
+
+    //Do I use this??
+
+//    public Mono<User> findAllByIdWithPosts(String username) {
+//        return Mono.zip(userRepositoryCustom.findByUsername(username),
+//                postRepositoryCustom.findAllByUser(username).collectList(),
+//                (t1, t2) -> t1.withPosts(t2));
+//    }
+
+    //    public Mono<User> mainPage(String token) {
+//        String[] str = token.split(" ");
+//        String username  = jwtUtil.getUsernameFromToken(str[1]);
+//        return Mono.zip(userRepositoryCustom.findByUsername(username),
+//                postRepositoryCustom.findAllByUser(username).collectList(),
+//                (t1, t2) -> t1.withPosts(t2));
+//    }
+
 }

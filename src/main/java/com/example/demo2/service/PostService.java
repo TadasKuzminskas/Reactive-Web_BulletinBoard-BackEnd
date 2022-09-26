@@ -27,9 +27,9 @@ public class PostService {
 
     @Autowired
     PostRepositoryCustom postRepositoryCustom;
-
-    @Autowired
-    CommentRepositoryCustom commentRepositoryCustom;
+//
+//    @Autowired
+//    CommentRepositoryCustom commentRepositoryCustom;
 
     @Autowired
     FriendRepositoryCustom friendRepositoryCustom;
@@ -50,30 +50,23 @@ public class PostService {
         return postRepositoryCustom.findAll();
     }
 
-    public Flux<Post> getAllByUser(String username) { return postRepositoryCustom.findAllByUser(username);}
+    public Mono<Integer> updatePost(Post post) {return  postRepositoryCustom.update(post);}
 
     public Mono<Integer> deletePostById(Long id) {return postRepositoryCustom.deleteById(id);}
 
-    public Mono<Integer> updatePost(Post post) {return  postRepositoryCustom.update(post);}
-
-
-    public Mono<Post> getByIdWithComments(Long id) {
-        return Mono.zip(postRepositoryCustom.findById(id),
-                commentRepositoryCustom.getCommentsByPost(id).collectList(),
-                (t1, t2) -> t1.withComments(t2));
-    }
-
     public Flux<Post> getPrivateByUsers(String token, int offset) {
-
         String[] str = token.split(" ");
         String username  = jwtUtil.getUsernameFromToken(str[1]);
-
         Flux<Post> followed = friendRepositoryCustom.getFriendsByUsername(username)
                 .flatMap(friends -> postRepositoryCustom.findWhereIsPrivateByUser(friends.getFriend(), offset));
-
-        followed.log();
-
         return followed;
     }
 
+    //public Flux<Post> getAllByUser(String username) { return postRepositoryCustom.findAllByUser(username);}
+
+    //    public Mono<Post> getByIdWithComments(Long id) {
+//        return Mono.zip(postRepositoryCustom.findById(id),
+//                commentRepositoryCustom.getCommentsByPost(id).collectList(),
+//                (t1, t2) -> t1.withComments(t2));
+//    }
 }
