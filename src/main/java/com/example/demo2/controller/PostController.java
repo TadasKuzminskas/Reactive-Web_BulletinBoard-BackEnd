@@ -44,11 +44,6 @@ public class PostController {
     @PutMapping("/post")
     public Mono<Integer> updatePostById(@RequestBody Post post) {return postService.updatePost(post);}
 
-//    @GetMapping("/postWithComments/{id}")
-//    public Mono<Post> getPostWithComments(@PathVariable Long id) {
-//        return postService.getByIdWithComments(id);
-//    }
-
 
 
 }

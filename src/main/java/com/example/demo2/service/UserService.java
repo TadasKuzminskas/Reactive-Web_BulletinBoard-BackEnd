@@ -14,6 +14,8 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+
 @Service
 @Slf4j
 public class UserService {
@@ -53,6 +55,15 @@ public class UserService {
     public Flux<User> findAllUsersThatStartWith(String text) {
         return userRepositoryCustom.findAllUsersThatStartWith(text);
     }
+
+//    public Flux<User> findAllUsersThatStartWith(String text) {
+//        return userRepositoryCustom.findAllUsersThatStartWith(text).flatMap(users -> {
+////            if (users.getUsername() == null) {
+//                return Mono.empty();
+////            }
+////            return Mono.just(users);
+//        });
+//    }
 
     public Mono<User> getUserByJwt(String token) {
         String[] str = token.split(" ");

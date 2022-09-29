@@ -6,10 +6,10 @@ import com.example.demo2.model.User;
 import com.example.demo2.repository.Custom.UserRepositoryCustom;
 import com.example.demo2.repository.UserRepository;
 import com.example.demo2.service.UserService;
+import com.example.demo2.util.pojos.ErrorResponseMessage;
+import com.example.demo2.util.pojos.ServerMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+
 
 @RestController
 @RequestMapping("/v1")
@@ -44,52 +45,69 @@ public class UserController {
                 .body(userFlux, User.class);
     }
 
-    @GetMapping("/user/{id}")
-    public Mono<User> getUserById(@PathVariable Long id) {
-        log.info("USER_CONTROLLER: getUserById({})", id);
-        return userService.findUserById(id);
-    }
 
-    @GetMapping("/activeUser")
-    public Mono<User> getActiveUser(@RequestHeader (name="Authorization") String token) {
-        return userService.getUserByJwt(token);
-    }
-
-    @GetMapping("/user/starts/{text}")
-    public Flux<User> getUsersThatStartWith(@PathVariable String text) {
-        if(text == null) {
-            return null;
+    public Mono<ServerResponse> getUserById(ServerRequest serverRequest) {
+        try {
+            Long userId = Long.parseLong(serverRequest.pathVariable("id"));
+            return userService.findUserById(userId).flatMap(user -> ServerResponse.ok().body(Mono.just(user), User.class))
+                    .switchIfEmpty(ServerResponse.ok().bodyValue(new ErrorResponseMessage("User not found", "404")));
+        } catch (Exception exception) {
         }
-        return userService.findAllUsersThatStartWith(text);
+        return ServerResponse.ok().bodyValue(new ErrorResponseMessage("User not found", "404"));
     }
 
-    //Do I use this?
 
-//    @GetMapping("/userWithPosts/{id}")
-//    public Mono<User> getUserWithPosts(@PathVariable String username) {
-//        return userService.findAllByIdWithPosts(username);
-//    }
-
-//    @GetMapping("/main")
-//    public Mono<User> main(@RequestHeader (name="Authorization") String token) {
-//       return userService.mainPage(token);
-//    }
-
-    @PostMapping("/userRegistration")
-    public Mono<Long> addUser(@RequestBody User user) {
-        return userService.addUser(user);
+    public Mono<ServerResponse> getActiveUser(ServerRequest serverRequest) {
+        Mono<User> user = userService.getUserByJwt(serverRequest.headers().header("Authorization").get(0));
+        return user.flatMap(user1 -> ServerResponse.ok().body(Mono.just(user1), User.class)
+        ).switchIfEmpty(ServerResponse.ok().bodyValue(new ErrorResponseMessage("User not found", "404")));
     }
 
-    @PutMapping("/user/{id}")
-    public Mono<Integer> updateUser(@PathVariable Long id, @RequestBody User user) {
-        log.info("USER_CONTROLLER: updating user: {}", user);
-        return userService.updateUser(user, id);
+
+    public Mono<ServerResponse> getUsersThatStartWith(ServerRequest serverRequest) {
+        Mono<ServerMessage> username = serverRequest.bodyToMono(ServerMessage.class);
+        return username.flatMap(user -> {
+            if (user.getServerMessage().equals("")) {
+                return ServerResponse.ok().bodyValue(new ErrorResponseMessage("Resource not found", "404"));
+            }
+            return ServerResponse.ok().body(userService.findAllUsersThatStartWith(user.getServerMessage()), User.class)
+                    .switchIfEmpty(ServerResponse.ok().bodyValue(new ErrorResponseMessage("Resource not found", "404")));
+        });
     }
 
-    @DeleteMapping("user/{id}")
-    public Mono<Integer> deleteUserById(@PathVariable Long id) {
-        log.info("USER_CONTROLLER: deleting user by id: {}", id);
-        return userService.deleteUser(id);
+    public Mono<ServerResponse> addUser(ServerRequest serverRequest) {
+        Mono<User> user = serverRequest.bodyToMono(User.class);
+         return user.flatMap(userData -> userService.addUser(userData).flatMap(i -> {
+            if (i == 0) {
+                return ServerResponse.ok().bodyValue(new ErrorResponseMessage("Resource already exists", "303"));
+            }
+            return ServerResponse.ok().bodyValue(new ServerMessage("user created"));
+
+        }));
+    }
+
+    public Mono<ServerResponse> updateUser(ServerRequest serverRequest) {
+        return serverRequest.bodyToMono(User.class).flatMap(user -> userService.updateUser(user, user.getId()))
+                .flatMap(userServiceResponse -> {
+                    if (userServiceResponse == 1) {
+                        return ServerResponse.ok().bodyValue(new ServerMessage("Resource updated"));
+                    }
+                    return ServerResponse.ok().bodyValue(new ErrorResponseMessage("Resource not found", "404"));
+                })
+                .switchIfEmpty(ServerResponse.ok().bodyValue(new ErrorResponseMessage("Resource not found", "404")));
+    }
+
+        public Mono<ServerResponse> deleteUser(ServerRequest serverRequest) {
+        Mono<User> user = userService.getUserByJwt(serverRequest.headers().header("Authorization").get(0));
+        return user.flatMap(user1 -> {
+            return userService.deleteUser(user1.getId()); }
+        ).flatMap(userServiceResponse -> {
+            if (userServiceResponse == 1) {
+                return ServerResponse.ok().bodyValue(new ServerMessage("User deleted"));
+            }
+            return ServerResponse.ok().bodyValue(new ErrorResponseMessage("Resource not found", "404"));
+                })
+                .switchIfEmpty(ServerResponse.ok().bodyValue(new ErrorResponseMessage("Resource not found", "404")));
     }
 
     public Mono<ServerResponse> getToken(ServerRequest serverRequest) {
