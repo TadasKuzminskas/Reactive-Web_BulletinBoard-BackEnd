@@ -4,16 +4,16 @@ IN DEVELOPMENT: Reactive Web MVC with Spring Security and JWT token.
 It's a sort of twitter clone where a user can register, add posts, comment on posts and etc.
 
 Utilizes:
-  R2DBC/mySQL
-  ReactiveWebMVC
+  R2DBC/mySQL,
+  ReactiveWebMVC,
   WebFluxSecurity
   
 Features:
-  File upload
-  Image preview
-  User registration
-  Authentication via Spring Security
-  Jwt token/refresh token
+  File upload,
+  Image preview,
+  User registration,
+  Authentication via Spring Security,
+  Jwt token/refresh token,
   Asset pagination
   
 This is an ongoing project for a BulletinBoard backend. 
