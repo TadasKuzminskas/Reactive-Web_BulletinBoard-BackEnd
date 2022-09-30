@@ -9,11 +9,12 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
+
 public class UserRouter {
 
-    @CrossOrigin
     @Bean
-    public RouterFunction<ServerResponse> userRouter(UserController userController) {
+    @CrossOrigin
+    public RouterFunction<ServerResponse> userRouterInstantiation(UserController userController) {
         return RouterFunctions.route()
                 .GET("/v1/users", userController::findAllUsers)
                 .GET("/v1/activeUser", userController::getActiveUser)

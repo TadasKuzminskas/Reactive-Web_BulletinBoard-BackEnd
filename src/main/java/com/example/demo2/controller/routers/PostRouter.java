@@ -14,8 +14,9 @@ public class PostRouter {
 
     @CrossOrigin
     @Bean
-    public RouterFunction<ServerResponse> postRouter(PostController postController) {
+    public RouterFunction<ServerResponse> postRouterInstantiation(PostController postController) {
         return RouterFunctions.route()
+                .POST("/v1/post", postController::uploadFileTest)
                 .build();
     }
 }
