@@ -6,9 +6,6 @@ import com.example.demo2.model.Post;
 import com.example.demo2.model.User;
 import com.example.demo2.repository.Custom.FriendRepositoryCustom;
 import com.example.demo2.repository.Custom.PostRepositoryCustom;
-import io.r2dbc.spi.Parameter;
-import org.apache.commons.io.LineIterator;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,14 +18,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.Sinks;
 import reactor.test.StepVerifier;
 
-import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 
 @SpringBootTest
@@ -68,7 +61,6 @@ class PostServiceTest {
         Instant instant = Instant.now();
         post = createPost(1L, "PostName", "PostContent", true, "PostUsername", "PostImage", instant);
     }
-
     @Test
     public void testAddPost() {
         Mockito.when(repository.save(any())).thenReturn(Mono.just(1L));

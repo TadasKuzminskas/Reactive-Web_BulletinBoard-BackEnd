@@ -59,6 +59,7 @@ public class WebFluxSecurityConfig {
                                 .pathMatchers("/v1/refreshToken").permitAll()
                                 .pathMatchers("/v1/userRegistration").permitAll()
                                 .pathMatchers("/v1/friend").permitAll()
+                                .pathMatchers("/v1/image/{filename}").permitAll()
                                 .anyExchange().authenticated()
                 )
                 .exceptionHandling()

@@ -6,6 +6,7 @@ import com.example.demo2.model.User;
 import com.example.demo2.repository.Custom.UserRepositoryCustom;
 import com.example.demo2.repository.UserRepository;
 import com.example.demo2.service.UserService;
+import com.example.demo2.util.UtilMethods;
 import com.example.demo2.util.pojos.ErrorResponseMessage;
 import com.example.demo2.util.pojos.ServerMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,9 @@ public class UserController {
 
     @Autowired
     private JWTUtil jwtUtil;
+
+    @Autowired
+    UtilMethods utilMethods;
 
 
     public Mono<ServerResponse> findAllUsers(ServerRequest serverRequest) {
@@ -115,7 +119,7 @@ public class UserController {
 
         return userMono.flatMap(user -> userRepositoryCustom.findByUsername(user.getUsername())
                 .flatMap(userDetails -> {
-                    if(passwordHash(user.getPassword()).equals(userDetails.getPassword())) {
+                    if(utilMethods.hashingFunction(user.getPassword()).equals(userDetails.getPassword())) {
                         return ServerResponse.ok().bodyValue(new AuthResponse(jwtUtil.generateToken(user), jwtUtil.generateRefreshToken(user)));
                     } else {
                         return  ServerResponse.badRequest().build();
@@ -135,26 +139,6 @@ public class UserController {
                 }
                     return ServerResponse.badRequest().build();
         }).switchIfEmpty(ServerResponse.badRequest().build());
-    }
-
-    public String passwordHash(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-
-            md.update(password.getBytes(StandardCharsets.UTF_8));
-
-            byte[] bytes = md.digest();
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < bytes.length; i++) {
-                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-            }
-            return sb.toString();
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return null;
     }
 
 }
