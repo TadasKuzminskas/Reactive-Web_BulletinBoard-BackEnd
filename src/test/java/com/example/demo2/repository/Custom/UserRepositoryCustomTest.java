@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.r2dbc.core.DatabaseClient;
@@ -28,12 +29,21 @@ class UserRepositoryCustomTest {
 
     private User user;
 
+    @Value("${db.username}")
+    private String dbUsername;
+
+    @Value("${db.password}")
+    private String dbPassword;
+
+    @Value("${db.nameTest}")
+    private String dbName;
+
     MySqlConnectionFactory factory = MySqlConnectionFactory.from(MySqlConnectionConfiguration.builder()
             .host("127.0.0.1")
             .port(3306)
-            .username("root")
-            .password("edwood7hv")
-            .database("testdb")
+            .username(dbUsername)
+            .password(dbPassword)
+            .database(dbName)
             .build());
 
     DatabaseClient databaseClient =  DatabaseClient.builder().connectionFactory(factory).build();

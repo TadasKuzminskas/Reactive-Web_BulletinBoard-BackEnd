@@ -6,6 +6,7 @@ import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.r2dbc.core.DatabaseClient;
 
 import org.springframework.stereotype.Component;
@@ -21,12 +22,13 @@ public class UserRepositoryCustom {
 
     // TODO : Might be bad code, but in order to change the DBClient for tests, I had to make
     //  this variable public.
-    private DatabaseClient databaseClient;
+    private final DatabaseClient databaseClient;
 
-    public UserRepositoryCustom(DatabaseClient client) {
-        this.databaseClient = client;
-    }
+//    public UserRepositoryCustom(DatabaseClient client) {
+//        this.databaseClient = client;
+//    }
 
+    @Autowired
     private UtilMethods utilMethods;
 
     public static final BiFunction<Row, RowMetadata, User> MAPPING_FUNCTION = (row, rowMetaData) -> User.builder()

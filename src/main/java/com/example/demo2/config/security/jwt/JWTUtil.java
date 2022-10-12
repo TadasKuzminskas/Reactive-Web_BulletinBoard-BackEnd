@@ -4,6 +4,7 @@ import com.example.demo2.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
@@ -14,9 +15,14 @@ import java.util.Map;
 @Component
 public class JWTUtil {
 
-    private String secret = "IfYouComeUpWithAVeryCleverSecretYouAreWelcomeToPutItHere";
-    private String refreshSecret = "AnotherLineOfDummyTextToSecureTheRefreshTokenTheOddsOfItBeingGuessedAreAstronomical";
-    private String expireTimeMilisec = "3000";
+    @Value("${jwt.secret}")
+    private String secret;
+
+    @Value("${jwt.refreshSecret}")
+    private String refreshSecret;
+
+    @Value("${jwt.expirationTime}")
+    private String expireTimeMilisec;
 
     public String generateToken(User user) {
         Date now = new Date();
