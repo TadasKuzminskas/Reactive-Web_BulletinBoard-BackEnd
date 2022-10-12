@@ -13,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -24,7 +23,6 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
-//@RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
 
     @MockBean
@@ -35,7 +33,6 @@ public class UserServiceTest {
 
     @InjectMocks
     private UserService service;
-
 
     private User user;
 
@@ -51,6 +48,7 @@ public class UserServiceTest {
         Mockito.when(repository.findUserById(anyLong())).thenReturn(Mono.just(user));
         Mono<User> returnedUser = service.findUserById(user.getId());
         StepVerifier.create(returnedUser).expectNext(user).expectComplete().verify();
+
     }
 
     @Test
@@ -66,6 +64,7 @@ public class UserServiceTest {
         Mockito.when(repository.findAllUsers()).thenReturn(Flux.just(user));
         Flux<User> returnedUsers = service.findAllUsers();
         StepVerifier.create(returnedUsers).expectNext(user).expectComplete().verify();
+        verify(repository, times(1)).findAllUsers();
     }
 
    @Test

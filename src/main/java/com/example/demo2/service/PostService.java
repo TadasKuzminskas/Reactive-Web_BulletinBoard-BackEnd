@@ -2,25 +2,16 @@ package com.example.demo2.service;
 
 
 import com.example.demo2.config.security.jwt.JWTUtil;
-import com.example.demo2.model.Comment;
-import com.example.demo2.model.Friends;
 import com.example.demo2.model.Post;
-import com.example.demo2.repository.Custom.CommentRepositoryCustom;
 import com.example.demo2.repository.Custom.FriendRepositoryCustom;
 import com.example.demo2.repository.Custom.PostRepositoryCustom;
-import com.example.demo2.util.pojos.PostResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -28,9 +19,6 @@ public class PostService {
 
     @Autowired
     PostRepositoryCustom postRepositoryCustom;
-//
-//    @Autowired
-//    CommentRepositoryCustom commentRepositoryCustom;
 
     @Autowired
     FriendRepositoryCustom friendRepositoryCustom;
@@ -63,11 +51,4 @@ public class PostService {
         return followed;
     }
 
-    //public Flux<Post> getAllByUser(String username) { return postRepositoryCustom.findAllByUser(username);}
-
-    //    public Mono<Post> getByIdWithComments(Long id) {
-//        return Mono.zip(postRepositoryCustom.findById(id),
-//                commentRepositoryCustom.getCommentsByPost(id).collectList(),
-//                (t1, t2) -> t1.withComments(t2));
-//    }
 }

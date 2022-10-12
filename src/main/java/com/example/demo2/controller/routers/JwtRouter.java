@@ -1,6 +1,6 @@
 package com.example.demo2.controller.routers;
 
-import com.example.demo2.controller.PostController;
+import com.example.demo2.controller.JwtController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,13 +9,15 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
-public class PostRouter {
+public class JwtRouter {
 
-    @CrossOrigin
     @Bean
-    public RouterFunction<ServerResponse> postRouterInstantiation(PostController postController) {
+    @CrossOrigin
+    public RouterFunction<ServerResponse> jwtRouterInstantiation(JwtController jwtController) {
         return RouterFunctions.route()
-                .GET("/v1/image/{filename}", postController::getImage)
+                .POST("/v1/token", jwtController::getToken)
+                .POST("/v1/refreshToken", jwtController::getRefreshToken)
                 .build();
     }
+
 }

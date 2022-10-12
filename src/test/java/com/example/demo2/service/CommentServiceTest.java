@@ -1,7 +1,6 @@
 package com.example.demo2.service;
 
 import com.example.demo2.model.Comment;
-import com.example.demo2.model.Post;
 import com.example.demo2.repository.CommentRepository;
 import com.example.demo2.repository.Custom.CommentRepositoryCustom;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +19,6 @@ import reactor.test.StepVerifier;
 
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 

@@ -2,7 +2,6 @@ package com.example.demo2.repository.Custom;
 
 import com.example.demo2.model.Comment;
 
-import com.example.demo2.model.Post;
 import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
-import java.util.UUID;
 import java.util.function.BiFunction;
 
 @RequiredArgsConstructor

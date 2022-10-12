@@ -16,11 +16,11 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     private JWTUtil jwtUtil;
     private UserRepositoryCustom userRepository;
 
+
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
         String token = authentication.getCredentials().toString();
         String userName = jwtUtil.getUsernameFromToken(token);
-        System.out.println(token);
 
         return userRepository.findByUsername(userName)
                 .flatMap(userDetails -> {

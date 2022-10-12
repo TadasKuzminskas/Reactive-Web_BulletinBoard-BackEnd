@@ -2,7 +2,6 @@ package com.example.demo2.service;
 
 import com.example.demo2.model.Friends;
 import com.example.demo2.repository.Custom.FriendRepositoryCustom;
-import io.r2dbc.spi.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +16,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 
 @SpringBootTest

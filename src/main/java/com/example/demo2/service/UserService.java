@@ -8,9 +8,7 @@ import com.example.demo2.repository.Custom.UserRepositoryCustom;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -56,36 +54,11 @@ public class UserService {
         return userRepositoryCustom.findAllUsersThatStartWith(text);
     }
 
-//    public Flux<User> findAllUsersThatStartWith(String text) {
-//        return userRepositoryCustom.findAllUsersThatStartWith(text).flatMap(users -> {
-////            if (users.getUsername() == null) {
-//                return Mono.empty();
-////            }
-////            return Mono.just(users);
-//        });
-//    }
-
     public Mono<User> getUserByJwt(String token) {
         String[] str = token.split(" ");
         String username  = jwtUtil.getUsernameFromToken(str[1]);
 
         return userRepositoryCustom.findByUsername(username);
     }
-
-    //Do I use this??
-
-//    public Mono<User> findAllByIdWithPosts(String username) {
-//        return Mono.zip(userRepositoryCustom.findByUsername(username),
-//                postRepositoryCustom.findAllByUser(username).collectList(),
-//                (t1, t2) -> t1.withPosts(t2));
-//    }
-
-    //    public Mono<User> mainPage(String token) {
-//        String[] str = token.split(" ");
-//        String username  = jwtUtil.getUsernameFromToken(str[1]);
-//        return Mono.zip(userRepositoryCustom.findByUsername(username),
-//                postRepositoryCustom.findAllByUser(username).collectList(),
-//                (t1, t2) -> t1.withPosts(t2));
-//    }
 
 }

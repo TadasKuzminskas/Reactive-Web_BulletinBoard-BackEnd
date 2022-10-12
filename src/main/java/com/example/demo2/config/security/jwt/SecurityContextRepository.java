@@ -1,6 +1,5 @@
 package com.example.demo2.config.security.jwt;
 
-import com.example.demo2.config.security.jwt.AuthenticationManager;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

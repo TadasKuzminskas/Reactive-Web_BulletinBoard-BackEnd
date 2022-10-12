@@ -1,7 +1,6 @@
 package com.example.demo2.controller;
 
 import com.example.demo2.model.Friends;
-import com.example.demo2.model.Post;
 import com.example.demo2.service.FriendsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ public class FriendsController {
     FriendsService friendsService;
 
     @PostMapping("/friend")
-    public Mono<Long> addPost(@RequestBody Friends friend) {
+    public Mono<Long> addFriend(@RequestBody Friends friend) {
         return friendsService.addFriend(friend);
     }
 

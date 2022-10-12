@@ -9,7 +9,6 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
-
 public class UserRouter {
 
     @Bean
@@ -17,9 +16,8 @@ public class UserRouter {
     public RouterFunction<ServerResponse> userRouterInstantiation(UserController userController) {
         return RouterFunctions.route()
                 .GET("/v1/users", userController::findAllUsers)
+                .GET("/v1/user/{id}", userController::getUserById)
                 .GET("/v1/activeUser", userController::getActiveUser)
-                .POST("/v1/token", userController::getToken)
-                .POST("/v1/refreshToken", userController::getRefreshToken)
                 .POST("/v1/userRegistration", userController::addUser)
                 .GET("/v1/user/starts", userController::getUsersThatStartWith)
                 .DELETE("/v1/user", userController::deleteUser)

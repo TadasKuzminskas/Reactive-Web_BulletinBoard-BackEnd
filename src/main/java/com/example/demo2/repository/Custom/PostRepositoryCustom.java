@@ -1,8 +1,6 @@
 package com.example.demo2.repository.Custom;
 
-import com.example.demo2.model.Comment;
 import com.example.demo2.model.Post;
-import com.example.demo2.util.pojos.PostResponse;
 import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
 
@@ -14,10 +12,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 import java.util.function.BiFunction;
 
 @RequiredArgsConstructor
