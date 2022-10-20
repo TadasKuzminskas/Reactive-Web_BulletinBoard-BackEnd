@@ -22,7 +22,7 @@ FrontEnd is available in the repo - https://github.com/TadasKuzminskas/Reactive-
 
 This is a training application for my own education purposes and I would not advise taking this code as a reference.
 
-The current version of the backend is not compatable to the front end. Going through a lot of refactoring/adding features.
+The current version of the backend is not FULLY compatable to the front end. Some features might not work. Going through a lot of refactoring/adding features.
 
 if you NEED to run the application please, be advised that it only works with java 11, versions after that resolve in 
 bean definition error. Might look into it in the future...
